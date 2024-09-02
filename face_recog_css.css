@@ -1,0 +1,51 @@
+body{
+    margin: 0;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar{
+    width: 100%;
+    height: 90px;
+    background-color: burlywood;
+    padding-top: 10px;
+   
+}
+.navbar p{
+    font-size:200%;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+
+}
+#webcam{
+    height: 500px;
+    width: 670px;
+    border: 2px solid black;
+    margin-left: 440px;
+    margin-top: 30px;
+}
+#btn{
+    background-color: burlywood;
+    width: 140px;
+    margin-left: 720px;
+    margin-top: 25px;
+    border-radius: 20px 20px;
+
+}
+#btn p{
+    font-weight: 900;
+}
+
+#btn:active {
+    background-color: burlywood;
+    box-shadow: 0 5px #666;
+    transform: translate(4px);
+  }
+  #result{
+    margin-left: 100px;
+    margin-top: -350px;
+    font-size: xx-large;
+    font-family: fantasy;
+  }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Website</title>
+    <link rel="stylesheet" href="face_recog_css.css"> 
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+           <p align="center">VISION AI</p>
+        </div>
+        <video id="webcam" autoplay></video>
+        <button id="btn">
+            <p>SEARCH</p>
+        </button>
+        <div id="result"></div> 
+        <script>
+            
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                document.getElementById('webcam').srcObject = stream;
+            })
+            .catch(err => console.error("Error accessing webcam: ", err));
+        
+            document.getElementById('btn').addEventListener('click', () => {
+                const video = document.getElementById('webcam');
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                canvas.toBlob(blob => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64data = reader.result.split(',')[1];
+                        fetch('http://127.0.0.1:5000/classify', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ image: base64data })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Server response:', data);  
+                            if (data.error) {
+                                document.getElementById('result').innerText = `Error: ${data.error}`;
+                            } else {
+                                document.getElementById('result').innerText = `Prediction: ${data.prediction}`;
+                                
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    };
+                    reader.readAsDataURL(blob);
+                }, 'image/png');
+            });
+        </script>
+        
+    </div>
+</body>
+</html>
